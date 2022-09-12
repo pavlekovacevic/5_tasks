@@ -1,0 +1,44 @@
+CREATE TABLE User
+( user_id int(5) PRIMARY KEY,
+  username varchar(25) NOT NULL,
+  password varchar(30) NOT NULL,
+  phone int NOT NULL
+  email varchar(30) NOT NULL,
+  dateCreate DATETIME NOT NULL DEFAULT GETDATE()
+  dateEdit DATETIME
+  );
+
+CREATE TABLE Order
+(
+    id int PRIMARY KEY,
+    userId FOREIGN KEY (user_id) REFERENCES User(user_id),
+    value int NOT NULL,
+    productId FOREIGN KEY (productId) REFERENCES Product(productId)
+
+)
+
+CREATE TABLE Product
+(
+    productId int PRIMARY KEY,
+    name varchar (30) NOT NULL,
+    price int(20) NOT NULL
+    )
+
+
+
+SELECT
+    SUM(Product.price * order_products.quantity) AS total_order_price,
+    orders.*,
+FROM
+    orders
+    LEFT JOIN Order_products ON Order.order_id = order_products.order_id
+    LEFT JOIN Product ON order_products.product_id = products.product_id
+    LEFT JOIN User USING orders.user_id = users.user_id
+GROUP BY
+    order_products.order_id 
+ORDER BY
+    order_id DESC
+
+
+
+
